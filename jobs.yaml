@@ -741,3 +741,68 @@
     wrappers:
       - ssh-agent:
           credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+
+- job:
+    name: "python-jiocloud-pkg"
+    project-style: freestyle
+    node: cloud
+    logrotate:
+      daysToKeep: 10
+      numToKeep: 20
+      artifactDaysToKeep: 7
+      artifactNumToKeep: 15
+    scm:
+      - git:
+          url: git@github.com:JioCloud/python-jiocloud.git
+          name: jiocloud
+          refspec: '+refs/heads/*:refs/remotes/jiocloud/*'
+          branches:
+            - master
+          basedir: build
+          credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+
+    triggers:
+      - pollscm: "H/15 * * * *"
+
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          rm -f ./* || true
+
+          cd build
+
+          # Someone needs to tak the blame
+          export DEBEMAIL=Soren.Hansen@ril.com
+          export DEBFULLNAME="JioCloud Jenkins"
+
+          # Create a changelog entry
+          dch -D precise -v ${BUILD_NUMBER} 'Automatic build'
+
+          # and build the source package
+          dpkg-buildpackage -S -nc
+          cd ..
+          DEB_BUILD_OPTIONS=nocheck sbuild -n -d precise -A *.dsc
+
+    properties:
+      - copyartifact:
+          projects: process-pkg
+      - github:
+          url: https://github.com/JioCloud/{name}/
+
+    publishers:
+      - ircbot:
+          strategy: failure-and-fixed
+          matrix-notifier: only-configurations
+      - archive:
+          artifacts: '*.dsc,*.diff.gz,*.tar.gz,*.changes,*.deb'
+          allow-empty: 'true'
+      - trigger-parameterized-builds:
+          - project: "process-pkg"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              triggering_job=${JOB_NAME}
+              triggering_build_number=${BUILD_NUMBER}
+
+    wrappers:
+      - ssh-agent:
+          credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
