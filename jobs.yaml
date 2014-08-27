@@ -181,7 +181,7 @@
       - github:
           url: https://github.com/{organization}/{name}/
 
-    publishers:
+#    publishers:
 #      - ircbot:
 #          strategy: failure-and-fixed
 #          matrix-notifier: only-configurations
@@ -295,7 +295,7 @@
       - github:
           url: https://github.com/JioCloud/{name}/
 
-    publishers:
+#    publishers:
 #      - ircbot:
 #          strategy: failure-and-fixed
 #          matrix-notifier: only-configurations
