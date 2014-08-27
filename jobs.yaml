@@ -182,9 +182,9 @@
           url: https://github.com/{organization}/{name}/
 
     publishers:
-      - ircbot:
-          strategy: failure-and-fixed
-          matrix-notifier: only-configurations
+#      - ircbot:
+#          strategy: failure-and-fixed
+#          matrix-notifier: only-configurations
 
 - job-template:
     name: "{name}-jiocloud-rebase-fix-testing"
@@ -296,9 +296,9 @@
           url: https://github.com/JioCloud/{name}/
 
     publishers:
-      - ircbot:
-          strategy: failure-and-fixed
-          matrix-notifier: only-configurations
+#      - ircbot:
+#          strategy: failure-and-fixed
+#          matrix-notifier: only-configurations
 
     wrappers:
       - ssh-agent:
