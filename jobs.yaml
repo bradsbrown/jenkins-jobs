@@ -532,7 +532,7 @@
             python -c "from debian_bundle.deb822 import Changes; print '\n'.join([x['name'] for x in Changes(open('"${x}"', 'r').read())['Files']])" | grep \.ddeb$ | while read ddeb; do changestool ${x} dumbremove ${ddeb} ; done
             GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo include precise ${x} || true
           done
-          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo copymatched trusty precise '*'
+          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty
 
 - job-template:
     name: "{name}-pkg"
