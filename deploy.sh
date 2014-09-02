@@ -1,5 +1,15 @@
 #!/bin/bash -xe
 
+if ! [ -e venv ]
+then
+    virtualenv venv
+    . venv/bin/activate
+    pip install -e git+https://github.com/JioCloud/python-jiocloud#egg=jiocloud
+    deactivate
+fi
+
+. venv/bin/activate
+
 if [ -z "${{etcd_discovery_token}}" ]
 then
     etcd_discovery_token=$(python -m jiocloud.orchestrate new_discovery_token)
