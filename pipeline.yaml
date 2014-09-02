@@ -1,5 +1,6 @@
 - job-template:
     name: "pipeline-{env}-deploy-transient"
+    node: master
     logrotate:
        numToKeep: 20
     triggers:
@@ -24,6 +25,7 @@
 
 - job-template:
     name: "pipeline-{env}-deploy"
+    node: master
     logrotate:
        numToKeep: 20
     triggers:
@@ -43,6 +45,7 @@
 
 - job-template:
     name: "pipeline-{env}-test-transient"
+    node: master
     properties:
       - inject:
           properties-file: /var/lib/jenkins/cloud.{env}.env
@@ -67,6 +70,7 @@
 
 - job-template:
     name: "pipeline-{env}-teardown"
+    node: master
     properties:
       - inject:
           properties-file: /var/lib/jenkins/cloud.{env}.env
@@ -81,6 +85,7 @@
 
 - job-template:
     name: "pipeline-{env}-update"
+    node: master
     parameters:
       - string:
           name: deploy_id
@@ -101,6 +106,7 @@
 
 - job-template:
     name: "pipeline-{env}-test"
+    node: master
     properties:
       - inject:
           properties-file: /var/lib/jenkins/cloud.{env}.env
@@ -143,3 +149,4 @@
 
 - job:
     name: fake-update
+    node: master
