@@ -1,0 +1,145 @@
+- job-template:
+    name: "pipeline-{env}-deploy-transient"
+    logrotate:
+       numToKeep: 20
+    triggers:
+      - timed: "H/30 * * * *"
+    properties:
+      - inject:
+          properties-file: /var/lib/jenkins/cloud.{env}.env
+    builders:
+      - shell:
+          !include-raw deploy.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "{env}-test-transient"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+      - trigger-parameterized-builds:
+          - project: "{env}-teardown"
+            condition: FAILED
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+
+- job-template:
+    name: "pipeline-{env}-deploy"
+    logrotate:
+       numToKeep: 20
+    triggers:
+      - timed: "H/30 * * * *"
+    properties:
+      - inject:
+          properties-file: /var/lib/jenkins/cloud.{env}.env
+    builders:
+      - shell:
+          !include-raw deploy.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "{env}-test"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+
+- job-template:
+    name: "pipeline-{env}-test-transient"
+    properties:
+      - inject:
+          properties-file: /var/lib/jenkins/cloud.{env}.env
+    parameters:
+      - string:
+          name: deploy_id
+    logrotate:
+       numToKeep: 20
+    builders:
+      - shell:
+          !include-raw test.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "{env}-teardown"
+            condition: ALWAYS
+            current-parameters: true
+#      - trigger-parameterized-builds:
+#          - project: "{nextenv}-deploy"
+#            condition: UNSTABLE_OR_BETTER
+#            predefined-parameters: |
+#              deploy_id=${{BUILD_NUMBER}}
+
+- job-template:
+    name: "pipeline-{env}-teardown"
+    properties:
+      - inject:
+          properties-file: /var/lib/jenkins/cloud.{env}.env
+    parameters:
+      - string:
+          name: deploy_id
+    logrotate:
+       numToKeep: 20
+    builders:
+      - shell:
+          !include-raw teardown.sh
+
+- job-template:
+    name: "pipeline-{env}-update"
+    parameters:
+      - string:
+          name: deploy_id
+    properties:
+      - inject:
+          properties-file: /var/lib/jenkins/cloud.{env}.env
+    logrotate:
+       numToKeep: 20
+    builders:
+      - shell:
+          !include-raw update.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "{env}-test"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+
+- job-template:
+    name: "pipeline-{env}-test"
+    properties:
+      - inject:
+          properties-file: /var/lib/jenkins/cloud.{env}.env
+    logrotate:
+       numToKeep: 20
+    builders:
+      - shell:
+          !include-raw test.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "{nextenv}-update"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+
+- project:
+    name: at
+    env: at
+    nextenv: staging
+    jobs:
+      - "pipeline-{env}-deploy-transient"
+      - "pipeline-{env}-test-transient"
+      - "pipeline-{env}-teardown"
+
+#- project:
+#    name: staging
+#    env: staging
+#    nextenv: production
+#    jobs:
+#      - "{env}-update"
+#      - "{env}-test"
+#
+#- project:
+#    name: production
+#    env: production
+#    nextenv: fake
+#    jobs:
+#      - "{env}-update"
+#      - "{env}-test"
+
+- job:
+    name: fake-update
