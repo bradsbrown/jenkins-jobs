@@ -32,7 +32,7 @@ echo 'etcd_discovery_token='${{etcd_discovery_token}} > /etc/facter/facts.d/etcd
 puppet apply --debug -e "include rjil::jiocloud"
 EOF
 
-python -m jiocloud.apply_resources apply --key_name=soren --project_tag=test${{BUILD_NUMBER}} /var/lib/jenkins/cloud.{env}.yaml userdata.txt
+python -m jiocloud.apply_resources apply --key_name=soren --project_tag=test${{BUILD_NUMBER}} environment/cloud.{env}.yaml userdata.txt
 
 if [ -n "$floating_ip" ]
 then
@@ -45,5 +45,5 @@ timeout 600 bash -c "while ! python -m jiocloud.orchestrate --host ${{ip}} ping;
 
 timeout 600 bash -c "while ! ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no jenkins@${{ip}} python -m jiocloud.orchestrate trigger_update ${{BUILD_NUMBER}}; do sleep 5; done"
 
-timeout 600 bash -c "while ! python -m jiocloud.apply_resources list --project_tag=test${{BUILD_NUMBER}} /var/lib/jenkins/cloud.{env}.yaml | sed -e 's/_/-/g' | python -m jiocloud.orchestrate --host ${{ip}} verify_hosts ${{BUILD_NUMBER}} ; do sleep 5; done"
+timeout 600 bash -c "while ! python -m jiocloud.apply_resources list --project_tag=test${{BUILD_NUMBER}} environment/cloud.{env}.yaml | sed -e 's/_/-/g' | python -m jiocloud.orchestrate --host ${{ip}} verify_hosts ${{BUILD_NUMBER}} ; do sleep 5; done"
 timeout 600 bash -c "while ! python -m jiocloud.orchestrate --host ${{ip}} check_single_version -v ${{BUILD_NUMBER}} ; do sleep 5; done"
