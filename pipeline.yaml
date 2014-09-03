@@ -18,10 +18,11 @@
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
       - trigger-parameterized-builds:
-          - project: "pipeline-{env}-teardown"
+          - project: "pipeline-{env}-test-transient"
             condition: FAILED
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
+              fail_immediately=1
 
 - job-template:
     name: "pipeline-{env}-deploy"

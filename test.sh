@@ -1,5 +1,10 @@
 #!/bin/bash -ex
 
+if [ -n "${{fail_immediately}}" ]
+then
+    exit 1
+fi
+
 if ! [ -e venv ]
 then
     virtualenv venv
