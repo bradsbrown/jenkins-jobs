@@ -13,12 +13,12 @@
           !include-raw deploy.sh
     publishers:
       - trigger-parameterized-builds:
-          - project: "{env}-test-transient"
+          - project: "pipeline-{env}-test-transient"
             condition: UNSTABLE_OR_BETTER
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
       - trigger-parameterized-builds:
-          - project: "{env}-teardown"
+          - project: "pipeline-{env}-teardown"
             condition: FAILED
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
@@ -38,7 +38,7 @@
           !include-raw deploy.sh
     publishers:
       - trigger-parameterized-builds:
-          - project: "{env}-test"
+          - project: "pipeline-{env}-test"
             condition: UNSTABLE_OR_BETTER
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
@@ -59,7 +59,7 @@
           !include-raw test.sh
     publishers:
       - trigger-parameterized-builds:
-          - project: "{env}-teardown"
+          - project: "pipeline-{env}-teardown"
             condition: ALWAYS
             current-parameters: true
 #      - trigger-parameterized-builds:
@@ -99,7 +99,7 @@
           !include-raw update.sh
     publishers:
       - trigger-parameterized-builds:
-          - project: "{env}-test"
+          - project: "pipeline-{env}-test"
             condition: UNSTABLE_OR_BETTER
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
@@ -117,7 +117,7 @@
           !include-raw test.sh
     publishers:
       - trigger-parameterized-builds:
-          - project: "{nextenv}-update"
+          - project: "pipeline-{nextenv}-update"
             condition: UNSTABLE_OR_BETTER
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
@@ -148,5 +148,5 @@
 #      - "{env}-test"
 
 - job:
-    name: fake-update
+    name: pipeline-fake-update
     node: master
