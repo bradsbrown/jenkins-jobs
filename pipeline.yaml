@@ -5,9 +5,11 @@
        numToKeep: 20
     triggers:
       - timed: "H/30 * * * *"
-    properties:
-      - inject:
-          properties-file: /var/lib/jenkins/cloud.{env}.env
+    scm:
+      - git:
+          url: https://github.com/JioCloud/puppet-rjil.git
+          branches:
+            - 'master'
     builders:
       - shell:
           !include-raw deploy.sh
@@ -31,9 +33,6 @@
        numToKeep: 20
     triggers:
       - timed: "H/30 * * * *"
-    properties:
-      - inject:
-          properties-file: /var/lib/jenkins/cloud.{env}.env
     builders:
       - shell:
           !include-raw deploy.sh
@@ -47,9 +46,6 @@
 - job-template:
     name: "pipeline-{env}-test-transient"
     node: master
-    properties:
-      - inject:
-          properties-file: /var/lib/jenkins/cloud.{env}.env
     parameters:
       - string:
           name: deploy_id
@@ -72,9 +68,6 @@
 - job-template:
     name: "pipeline-{env}-teardown"
     node: master
-    properties:
-      - inject:
-          properties-file: /var/lib/jenkins/cloud.{env}.env
     parameters:
       - string:
           name: deploy_id
@@ -90,9 +83,6 @@
     parameters:
       - string:
           name: deploy_id
-    properties:
-      - inject:
-          properties-file: /var/lib/jenkins/cloud.{env}.env
     logrotate:
        numToKeep: 20
     builders:
@@ -108,9 +98,6 @@
 - job-template:
     name: "pipeline-{env}-test"
     node: master
-    properties:
-      - inject:
-          properties-file: /var/lib/jenkins/cloud.{env}.env
     logrotate:
        numToKeep: 20
     builders:

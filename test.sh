@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+. /var/lib/jenkins/cloud.{env}.env
+
 if [ -n "${{fail_immediately}}" ]
 then
     exit 1

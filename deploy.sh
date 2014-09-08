@@ -1,5 +1,7 @@
 #!/bin/bash -xe
 
+. /var/lib/jenkins/cloud.{env}.env
+
 if ! [ -e venv ]
 then
     virtualenv venv
