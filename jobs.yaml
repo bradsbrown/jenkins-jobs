@@ -666,7 +666,7 @@
           cp control postinst debian/DEBIAN
           cp jio-site.conf debian/etc/apache2/conf.d/
           cp ./*.php ./*.html ./*.css debian/etc/jio-site
-          cp -R js/ css/ functions/ images/ screens/ debian/etc/jio-site
+          cp -R js/ css/ functions/ images/ debian/etc/jio-site
           fakeroot chown -R root:root debian
           #fakeroot chown -R nobody:nobody debian/etc/jio-site
           fakeroot dpkg-deb --build debian .
