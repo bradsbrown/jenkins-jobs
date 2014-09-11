@@ -124,16 +124,16 @@
 #    env: staging
 #    nextenv: production
 #    jobs:
-#      - "{env}-update"
-#      - "{env}-test"
+#      - "pipeline-{env}-update"
+#      - "pipeline-{env}-test"
 #
 #- project:
 #    name: production
 #    env: production
 #    nextenv: fake
 #    jobs:
-#      - "{env}-update"
-#      - "{env}-test"
+#      - "pipeline-{env}-update"
+#      - "pipeline-{env}-test"
 
 - job:
     name: pipeline-fake-update
