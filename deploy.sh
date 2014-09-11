@@ -17,22 +17,7 @@ then
     etcd_discovery_token=$(python -m jiocloud.orchestrate new_discovery_token)
 fi
 
-cat <<EOF >userdata.txt
-#!/bin/bash
-release="\$(lsb_release -cs)"
-wget -O puppet.deb http://apt.puppetlabs.com/puppetlabs-release-\${{release}}.deb
-dpkg -i puppet.deb
-apt-get update
-apt-get install -y puppet
-apt-get install -y software-properties-common
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 85596F7A
-add-apt-repository "deb http://jiocloud.rustedhalo.com/ubuntu/ \${{release}} main"
-apt-get update
-apt-get install puppet-jiocloud
-sudo mkdir -p /etc/facter/facts.d
-echo 'etcd_discovery_token='${{etcd_discovery_token}} > /etc/facter/facts.d/etcd.txt
-puppet apply --debug -e "include rjil::jiocloud"
-EOF
+bash userdata.sh -t "${{etcd_discovery_token}}" > userdata.txt
 
 python -m jiocloud.apply_resources apply --key_name=soren --project_tag=test${{BUILD_NUMBER}} environment/cloud.{env}.yaml userdata.txt
 
