@@ -95,7 +95,7 @@
             git checkout -b jiocloud_master jiocloud/master
 
             # Make sure we have the relevant commit
-            git fetch origin $(echo "${{branch}}" | cut -f2- -d/)
+            git fetch -t origin $(echo "${{branch}}" | cut -f2- -d/)
 
             if [ -n "${{commit}}" ]
             then
@@ -135,7 +135,7 @@
           then
               # If that works out, tag it and push to github
               git tag "${{TAGNAME}}"
-              git push jiocloud +${{COMMIT_TO_PUSH}}:master "${{TAGNAME}}"
+              git push --tags jiocloud +${{COMMIT_TO_PUSH}}:master "${{TAGNAME}}"
           else
               exit 1
           fi
@@ -248,7 +248,7 @@
             git checkout -b jiocloud_master FETCH_HEAD
 
             # Make sure we have the relevant commit
-            git fetch origin $(echo "${{branch}}" | cut -f2- -d/)
+            git fetch -t origin $(echo "${{branch}}" | cut -f2- -d/)
 
             if [ -n "${{commit}}" ]
             then
