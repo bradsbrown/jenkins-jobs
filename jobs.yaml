@@ -12,6 +12,7 @@
           url: https://github.com/{organization}/{name}.git
           branches:
             - '{srcbranch}'
+          timeout: 10
 
     triggers:
       - pollscm: "H/15 * * * *"
@@ -55,6 +56,7 @@
           branches:
             - jiocloud/devmaster
           credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+          timeout: 10
 
     triggers:
       - pollscm: "H/15 * * * *"
@@ -553,6 +555,7 @@
             - jiocloud/packaging
           basedir: build
           credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+          timeout: 10
 
     triggers:
       - pollscm: "H/15 * * * *"
