@@ -468,7 +468,7 @@
       - repo:
           manifest-url: https://github.com/JioCloud/contrail-vnc
           manifest-file: noauth.xml
-          manifest-branch: R1.06
+          manifest-branch: R1.10
 
     triggers:
       - pollscm: "H/15 * * * *"
