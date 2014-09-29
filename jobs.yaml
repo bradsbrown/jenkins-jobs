@@ -487,7 +487,7 @@
           rm -rf build/packages/*
           make -f packages.make source-package-contrail source-package-neutron-plugin-contrail
           cd build/packages
-          for x in *.dsc; do sbuild -n -d precise -A ${x} || true; done
+          for x in *.dsc; do sbuild -n -d trusty -A ${x} || true; done
 
     publishers:
       - archive:
@@ -499,6 +499,7 @@
             predefined-parameters: |
               triggering_job=${JOB_NAME}
               triggering_build_number=${BUILD_NUMBER}
+              distribution=trusty
 
 
 - job:
@@ -513,6 +514,10 @@
           name: triggering_build_number
           default: unknown
           description: "The build number that triggered us"
+      - string:
+          name: distribution
+          default: precise
+          description: "The target distribution"
     builders:
       - shell: |
           #!/bin/bash -xe
@@ -534,7 +539,7 @@
           for x in *.changes
           do
             python -c "from debian_bundle.deb822 import Changes; print '\n'.join([x['name'] for x in Changes(open('"${x}"', 'r').read())['Files']])" | grep \.ddeb$ | while read ddeb; do changestool ${x} dumbremove ${ddeb} ; done
-            GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo include precise ${x} || true
+            GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo include ${distribution} ${x} || true
           done
           GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty
 
