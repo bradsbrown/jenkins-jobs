@@ -7,16 +7,12 @@ then
     exit 1
 fi
 
-if ! [ -e venv ]
-then
-    virtualenv venv
-    . venv/bin/activate
-    pip install -e git+https://github.com/JioCloud/python-jiocloud#egg=jiocloud
-    deactivate
-fi
+rm -rf venv
 
+virtualenv venv
 . venv/bin/activate
+pip install -e git+https://github.com/JioCloud/python-jiocloud#egg=jiocloud
 
-ip=$(python -m jiocloud.utils get_ip_of_node etcd1_test${{deploy_id}})
+python -m jiocloud.apply_resources ssh_config --project_tag=test${{deploy_id}} environment/cloud.{env}.yaml > ssh_config
 
-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no jenkins@${{ip}} true
+ssh -F ssh_config -l jenkins oc1_test${{deploy_id}} '. <(sudo cat /root/openrc) ; glance image-list'

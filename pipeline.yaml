@@ -51,6 +51,11 @@
           name: deploy_id
     logrotate:
        numToKeep: 20
+    scm:
+      - git:
+          url: https://github.com/JioCloud/puppet-rjil.git
+          branches:
+            - 'master'
     builders:
       - shell:
           !include-raw test.sh

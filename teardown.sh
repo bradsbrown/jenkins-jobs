@@ -2,14 +2,10 @@
 
 . /var/lib/jenkins/cloud.{env}.env
 
-if ! [ -e venv ]
-then
-    virtualenv venv
-    . venv/bin/activate
-    pip install -e git+https://github.com/JioCloud/python-jiocloud#egg=jiocloud
-    deactivate
-fi
+rm -rf venv
 
+virtualenv venv
 . venv/bin/activate
+pip install -e git+https://github.com/JioCloud/python-jiocloud#egg=jiocloud
 
 python -m jiocloud.apply_resources delete test${{deploy_id}}
