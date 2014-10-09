@@ -713,9 +713,12 @@
           #!/bin/bash -xe
           rm -f ./* || true
 
-          cd build
 
-          debian/rules refresh_modules
+          export GEM_HOME=$(pwd)/vendor
+          cd build
+          bundle install
+
+          bundle exec debian/rules refresh_modules
           #
           # Someone needs to tak the blame
           export DEBEMAIL=Soren.Hansen@ril.com
