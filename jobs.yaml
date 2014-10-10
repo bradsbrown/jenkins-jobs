@@ -534,6 +534,7 @@
 
       - shell: |
           #!/bin/bash -xe
+          umask 022
           find
           cd incoming
           for x in *.changes
