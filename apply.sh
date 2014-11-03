@@ -9,11 +9,6 @@ do
     fi
 done
 
-if ! which git > /dev/null
-then
-    echo "bzr is needed, but not installed. Fixing."
-    sudo apt-get install bzr
-fi
 if [ ! -e venv ]
 then
     virtualenv venv
