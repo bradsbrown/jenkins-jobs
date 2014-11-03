@@ -11,6 +11,9 @@ done
 
 if [ ! -e venv ]
 then
+    # virtualenv helps create virtualized python environments
+    # Each with their own interpreter and libraries
+    # Very useful when you need to custom pip install libraries
     virtualenv venv
     . venv/bin/activate
     pip install -e bzr+http://bazaar.launchpad.net/~soren/python-jenkins/add-crumb#egg=jenkins
