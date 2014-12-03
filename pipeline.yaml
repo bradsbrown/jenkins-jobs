@@ -1,8 +1,100 @@
-- project:
-    name: at
+- job:
+    name: "pipeline-at-prepare"
+    node: master
+    logrotate:
+       numToKeep: 20
+#    triggers:
+#      - timed: "H/30 * * * *"
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          umask 022
+          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty-testing
+
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "pipeline-at-deploy"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+
+
+- job:
+    name: "pipeline-at-deploy"
+    node: master
+    env: foo
+    logrotate:
+       numToKeep: 20
+    scm:
+      - git:
+          url: https://github.com/JioCloud/puppet-rjil.git
+          branches:
+            - 'master'
+          skip-tag: true
+    builders:
+      - shell:
+          !include-raw deploy.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "pipeline-at-test-transient"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
+      - trigger-parameterized-builds:
+          - project: "pipeline-at-teardown"
+            condition: FAILED
+            current-parameters: true
+
+- job:
+    name: "pipeline-at-test"
+    node: master
+    parameters:
+      - string:
+          name: deploy_id
+    logrotate:
+       numToKeep: 20
+    scm:
+      - git:
+          url: https://github.com/JioCloud/puppet-rjil.git
+          branches:
+            - 'master'
+          skip-tag: true
+    builders:
+      - shell:
+          !include-raw test.sh
+    publishers:
+      - trigger-parameterized-builds:
+          - project: "pipeline-at-teardown"
+            condition: ALWAYS
+            current-parameters: true
+      - trigger-parameterized-builds:
+          - project: "pipeline-at-promote"
+            condition: UNSTABLE_OR_BETTER
+            current-parameters: true
+
+- job:
+    name: pipeline-at-promote
     env: at
-    nextenv: staging
-    jobs:
-      - "pipeline-{env}-deploy-transient"
-      - "pipeline-{env}-test-transient"
-      - "pipeline-{env}-teardown"
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          umask 022
+          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty ${x} || true
+
+- job:
+    name: "pipeline-at-teardown"
+    node: master
+    parameters:
+      - string:
+          name: deploy_id
+    scm:
+      - git:
+          url: https://github.com/JioCloud/puppet-rjil.git
+          branches:
+            - 'master'
+          skip-tag: true
+    logrotate:
+       numToKeep: 20
+    builders:
+      - shell:
+          !include-raw teardown.sh

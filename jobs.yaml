@@ -499,7 +499,6 @@
             predefined-parameters: |
               triggering_job=${JOB_NAME}
               triggering_build_number=${BUILD_NUMBER}
-              distribution=trusty
 
 
 - job:
@@ -514,10 +513,6 @@
           name: triggering_build_number
           default: unknown
           description: "The build number that triggered us"
-      - string:
-          name: distribution
-          default: precise
-          description: "The target distribution"
     builders:
       - shell: |
           #!/bin/bash -xe
@@ -540,9 +535,8 @@
           for x in *.changes
           do
             python -c "from debian_bundle.deb822 import Changes; print '\n'.join([x['name'] for x in Changes(open('"${x}"', 'r').read())['Files']])" | grep \.ddeb$ | while read ddeb; do changestool ${x} dumbremove ${ddeb} ; done
-            GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo include ${distribution} ${x} || true
+            GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo include trusty-unstable ${x} || true
           done
-          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty
 
 - job-template:
     name: "{name}-pkg"
