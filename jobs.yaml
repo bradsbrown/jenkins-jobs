@@ -491,7 +491,7 @@
 
     publishers:
       - archive:
-          artifacts: 'build/packages/*.dsc,build/packages/*.diff.gz,build/packages/*.tar.gz,build/packages/*.changes,build/packages/*.deb'
+          artifacts: 'build/packages/*.dsc,build/packages/*.diff.gz,build/packages/*.tar.gz,build/packages/*.changes,build/packages/*.deb,build/packages/*.ddeb'
           allow-empty: 'true'
       - trigger-parameterized-builds:
           - project: "process-pkg"
