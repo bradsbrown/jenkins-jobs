@@ -507,6 +507,7 @@
       - repo:
           manifest-url: https://github.com/JioCloud/repoconf
           manifest-file: default.xml
+          destination-dir: build
 
     triggers:
       - pollscm: "H/15 * * * *"
@@ -518,12 +519,14 @@
     builders:
       - shell: |
           #!/bin/bash -xe
+          cd build
           bash ./debian/sync-repo.sh
           # Cook sbuild build command here. Take contrail above, as an example. At this point we only have the repositories and unified debian/ folder.
+          sbuild -d trusty -A *.dsc
 
     publishers:
       - archive:
-          artifacts: 'build/packages/*.dsc,build/packages/*.diff.gz,build/packages/*.tar.gz,build/packages/*.changes,build/packages/*.deb'
+          artifacts: '*.dsc,*.diff.gz,*.tar.gz,*.changes,*.deb'
           allow-empty: 'true'
       - trigger-parameterized-builds:
           - project: "process-pkg"
