@@ -501,6 +501,38 @@
               triggering_build_number=${BUILD_NUMBER}
               distribution=trusty
 
+- job:
+    name: repoconf
+    node: cloud
+    scm:
+      - repo:
+          manifest-url: https://github.com/JioCloud/repoconf
+          manifest-file: default.xml
+
+    triggers:
+      - pollscm: "H/15 * * * *"
+
+    properties:
+      - copyartifact:
+          projects: process-pkg
+
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          bash ./debian/sync-repo.sh
+          # Cook sbuild build command here. Take contrail above, as an example. At this point we only have the repositories and unified debian/ folder.
+
+    publishers:
+      - archive:
+          artifacts: 'build/packages/*.dsc,build/packages/*.diff.gz,build/packages/*.tar.gz,build/packages/*.changes,build/packages/*.deb'
+          allow-empty: 'true'
+      - trigger-parameterized-builds:
+          - project: "process-pkg"
+            condition: UNSTABLE_OR_BETTER
+            predefined-parameters: |
+              triggering_job=${JOB_NAME}
+              triggering_build_number=${BUILD_NUMBER}
+              distribution=trusty
 
 - job:
     name: process-pkg
