@@ -524,7 +524,7 @@
           bash ./debian/sync-repo.sh
           # Cook sbuild build command here. Take contrail above, as an example. At this point we only have the repositories and unified debian/ folder.
           cd ..
-          sbuild -d trusty -A *.dsc
+          sbuild -n -d trusty -A *.dsc
 
     publishers:
       - archive:
