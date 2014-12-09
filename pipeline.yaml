@@ -37,12 +37,12 @@
           - project: "pipeline-at-test"
             condition: UNSTABLE_OR_BETTER
             predefined-parameters: |
-              deploy_id=${{BUILD_NUMBER}}
+              deploy_id=${BUILD_NUMBER}
       - trigger-parameterized-builds:
           - project: "pipeline-at-teardown"
             condition: FAILED
             predefined-parameters: |
-              deploy_id=${{BUILD_NUMBER}}
+              deploy_id=${BUILD_NUMBER}
 
 - job:
     name: "pipeline-at-test"
