@@ -3,8 +3,9 @@
     node: master
     logrotate:
        numToKeep: 20
-#    triggers:
-#      - timed: "H/30 * * * *"
+    block-downstream: true
+    triggers:
+      - timed: "H/30 * * * *"
     builders:
       - shell: |
           #!/bin/bash -xe
@@ -22,7 +23,7 @@
 - job:
     name: "pipeline-at-deploy"
     node: master
-    env: foo
+    block-downstream: true
     logrotate:
        numToKeep: 20
     scm:
@@ -36,7 +37,7 @@
           !include-raw deploy.sh
     publishers:
       - trigger-parameterized-builds:
-          - project: "pipeline-at-test-transient"
+          - project: "pipeline-at-test"
             condition: UNSTABLE_OR_BETTER
             predefined-parameters: |
               deploy_id=${{BUILD_NUMBER}}
@@ -48,6 +49,7 @@
 - job:
     name: "pipeline-at-test"
     node: master
+    block-downstream: true
     parameters:
       - string:
           name: deploy_id
@@ -74,6 +76,7 @@
 
 - job:
     name: pipeline-at-promote
+    block-downstream: true
     env: at
     builders:
       - shell: |
@@ -84,6 +87,7 @@
 - job:
     name: "pipeline-at-teardown"
     node: master
+    block-downstream: true
     parameters:
       - string:
           name: deploy_id

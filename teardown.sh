@@ -9,13 +9,12 @@ else
 fi
 
 export env
-
-. /var/lib/jenkins/cloud.${env}.env
-
-rm -rf venv
+export cloud_provider=hp
+BUILD_NUMBER=${deploy_id}
+. ./build_scripts/common.sh
 
 virtualenv venv
 . venv/bin/activate
 pip install -e git+https://github.com/JioCloud/python-jiocloud#egg=jiocloud
 
-#python -m jiocloud.apply_resources delete test${deploy_id}
+python -m jiocloud.apply_resources delete "${project_tag}"
