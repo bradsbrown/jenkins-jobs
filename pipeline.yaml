@@ -13,12 +13,9 @@
           GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty-testing
 
     publishers:
-      - trigger-parameterized-builds:
+      - trigger:
           - project: "pipeline-at-deploy"
-            condition: UNSTABLE_OR_BETTER
-            predefined-parameters: |
-              deploy_id=${{BUILD_NUMBER}}
-
+            threshold: UNSTABLE
 
 - job:
     name: "pipeline-at-deploy"
@@ -44,7 +41,8 @@
       - trigger-parameterized-builds:
           - project: "pipeline-at-teardown"
             condition: FAILED
-            current-parameters: true
+            predefined-parameters: |
+              deploy_id=${{BUILD_NUMBER}}
 
 - job:
     name: "pipeline-at-test"
