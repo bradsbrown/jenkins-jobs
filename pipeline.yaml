@@ -14,8 +14,8 @@
 
     publishers:
       - trigger:
-          - project: "pipeline-at-deploy"
-            threshold: UNSTABLE
+          project: "pipeline-at-deploy"
+          threshold: "UNSTABLE"
 
 - job:
     name: "pipeline-at-deploy"
