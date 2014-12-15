@@ -74,13 +74,14 @@
 
 - job:
     name: pipeline-at-promote
+    node: master
     block-downstream: true
     env: at
     builders:
       - shell: |
           #!/bin/bash -xe
           umask 022
-          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty ${x} || true
+          GNUPGHOME=$HOME/aptrepo/gpg reprepro -b $HOME/aptrepo pull trusty || true
 
 - job:
     name: "pipeline-at-teardown"
