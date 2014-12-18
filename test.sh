@@ -10,5 +10,6 @@ fi
 
 export env
 export cloud_provider=hp
+BUILD_NUMBER=$deploy_id
 chmod +x ./build_scripts/test.sh
 build_scripts/test.sh
