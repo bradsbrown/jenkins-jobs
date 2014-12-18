@@ -521,8 +521,12 @@
           #!/bin/bash -xe
           rm *.dsc *.diff.gz *.tar.gz *.changes *.deb || true
           cd build
-          bash ./debian/sync-repo.sh
-          # Cook sbuild build command here. Take contrail above, as an example. At this point we only have the repositories and unified debian/ folder.
+          bash ./debian/sync-repo.sh || rv=$?
+          if [ "$rv" = 2 ]
+          then
+              echo Only automatic changes
+              exit 0
+          fi
           cd ..
           sbuild -n -d trusty -A *.dsc
           cd build
