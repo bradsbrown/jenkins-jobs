@@ -525,6 +525,10 @@
           # Cook sbuild build command here. Take contrail above, as an example. At this point we only have the repositories and unified debian/ folder.
           cd ..
           sbuild -n -d trusty -A *.dsc
+          cd build
+          git commit -a -m "Build number: $BUILD_NUMBER"
+          git remote set-url --push jiocloud git@github.com:JioCloud/autobuild.git
+          git push jiocloud HEAD:master
 
     publishers:
       - archive:
@@ -537,6 +541,11 @@
               triggering_job=${JOB_NAME}
               triggering_build_number=${BUILD_NUMBER}
               distribution=trusty
+    wrappers:
+      - ssh-agent:
+          credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+      - workspace-cleanup
+
 
 - job:
     name: process-pkg
