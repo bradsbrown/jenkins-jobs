@@ -523,7 +523,7 @@
           cd build
           rv=0
           bash ./debian/sync-repo.sh || rv=$?
-          if [ "$rv" = 2 ]
+          if [ "$rv" = 3 ]
           then
               echo Only automatic changes
               exit 0
