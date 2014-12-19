@@ -521,11 +521,15 @@
           #!/bin/bash -xe
           rm *.dsc *.diff.gz *.tar.gz *.changes *.deb || true
           cd build
+          rv=0
           bash ./debian/sync-repo.sh || rv=$?
           if [ "$rv" = 2 ]
           then
               echo Only automatic changes
               exit 0
+          elif [ "$rv" != 0 ]
+          then
+              exit $rv
           fi
           cd ..
           sbuild -n -d trusty -A *.dsc
