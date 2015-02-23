@@ -736,6 +736,47 @@
           allow-empty: 'true'
 
 - job:
+    name: "puppet-jiocloud-cache"
+    project-style: freestyle
+    node: cloud
+    logrotate:
+      daysToKeep: 10
+      numToKeep: 20
+      artifactNumToKeep: 2
+    scm:
+      - git:
+          url: git@github.com:JioCloud/puppet-rjil.git
+          name: jiocloud
+          refspec: '+refs/heads/*:refs/remotes/jiocloud/*'
+          branches:
+            - master
+          basedir: build
+          credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+
+    triggers:
+      - timed: "0 0 * * *"
+
+    builders:
+      - shell: |
+          #!/bin/bash -xe
+          rm -f ./* || true
+
+          export GEM_HOME=$(pwd)/vendor
+          cd build
+          bundle install
+
+          bundle exec debian/rules refresh_modules
+          cd modules ; tar cvzf ../../cache.tar.gz .
+
+    publishers:
+      - archive:
+          artifacts: 'cache.tar.gz'
+
+    wrappers:
+      - ssh-agent:
+          credentials-id: 46c0cb26-2b11-443c-b556-0f7631f02410
+
+- job:
     name: "puppet-jiocloud-pkg"
     project-style: freestyle
     node: cloud
