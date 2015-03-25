@@ -9,7 +9,7 @@ else
 fi
 
 export env
-export cloud_provider=hp
+export cloud_provider=jio
 BUILD_NUMBER=$deploy_id
 chmod +x ./build_scripts/test.sh
 build_scripts/test.sh
