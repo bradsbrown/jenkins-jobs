@@ -324,7 +324,7 @@
 
 - job-group:
     name: upstream-project
-    srcbranch: stable/havana
+    srcbranch: stable/icehouse
     jobs:
       - "{name}-upstream"
       - "{name}-jiocloud"
