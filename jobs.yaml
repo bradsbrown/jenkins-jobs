@@ -818,7 +818,7 @@
           dch -D precise -v ${BUILD_NUMBER} 'Automatic build'
 
           # and build the source package
-          dpkg-buildpackage -S -nc
+          dpkg-buildpackage -S -nc -uc -us
           cd ..
           DEB_BUILD_OPTIONS=nocheck sbuild -n -d precise -A *.dsc
 
