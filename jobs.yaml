@@ -20,11 +20,6 @@
 
     builders:
       - shell: "rm -rf .tox; tox -e py27"
-      - trigger-builds:
-          - project: "{name}-jiocloud"
-            predefined-parameters: |
-              branch=${{GIT_BRANCH}}
-              commit=${{GIT_COMMIT}}
 
     properties:
       - github:
@@ -313,7 +308,6 @@
     srcbranch: master
     jobs:
       - "{name}-upstream"
-      - "{name}-jiocloud"
 
 - job-group:
     name: upstream-project-nostable-rebase-fix-testing
@@ -327,7 +321,6 @@
     srcbranch: stable/icehouse
     jobs:
       - "{name}-upstream"
-      - "{name}-jiocloud"
 
 - project:
     name: nova
