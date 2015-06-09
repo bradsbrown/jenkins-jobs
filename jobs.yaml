@@ -328,7 +328,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: python-novaclient
@@ -336,7 +335,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable
-      - '{name}-pkg'
 
 - project:
     name: glance
@@ -344,7 +342,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: python-glanceclient
@@ -352,7 +349,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable
-      - '{name}-pkg'
 
 - project:
     name: heat
@@ -360,7 +356,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: ceilometer
@@ -368,7 +363,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: horizon
@@ -377,7 +371,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable-rebase-fix-testing
-      - '{name}-pkg'
 
 - project:
     name: reg-service
@@ -392,7 +385,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable
-      - '{name}-pkg'
 
 - project:
     name: keystone
@@ -400,7 +392,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: python-keystoneclient
@@ -408,7 +399,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable
-      - '{name}-pkg'
 
 - project:
     name: neutron
@@ -416,7 +406,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: python-neutronclient
@@ -424,7 +413,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable
-      - '{name}-pkg'
 
 - project:
     name: cinder
@@ -432,7 +420,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project
-      - '{name}-pkg'
 
 - project:
     name: python-cinderclient
@@ -440,7 +427,6 @@
     codebranch: jiocloud/master
     jobs:
       - upstream-project-nostable
-      - '{name}-pkg'
 
 - project:
     name: oslo-incubator
